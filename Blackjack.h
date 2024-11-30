@@ -6,7 +6,6 @@
 #include <iostream>
 using namespace std;
 
-
 class Card {
 public:
     Card();
@@ -44,6 +43,12 @@ class Hand {
         string name;
 
 };
+
+void dealPlayers(Deck* deck, vector<Hand> &players);
+
+void removePlayers(vector<Hand> &players);
+
+void addPlayers(vector<Hand> &players);
 
 int total(Hand hand);
 

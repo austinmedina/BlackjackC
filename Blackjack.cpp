@@ -3,8 +3,8 @@
 using namespace std;
 
 Deck::Deck() {
-    string suits[] = { "Spades", "Clubs", "Diamonds", "Hearts" };
-    string vals[] = { "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King" };
+    string suits[] = {"♥", "♦", "♣", "♠" };
+    string vals[] = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
     for (string s : suits) {
         for (string v : vals) {
             Card card(s, v);
@@ -48,10 +48,6 @@ Card::Card(string s, string v) {
     val = v;
 }
 
-void Card::show() {
-    cout << val << " of " << suit << endl;
-}
-
 void Card::setSuit(string s) {
     suit = s;
 }
@@ -82,8 +78,35 @@ void Hand::addCard(Card card) {
 
 void Hand::showHand() {
     for (Card card : cards) {
-        card.show();
+        cout << "-------  ";    
     }
+    cout << endl;
+
+    for (Card card : cards) {
+        cout << "|" << card.getSuit() << "    |  ";
+    }
+    cout << endl;
+
+    for (Card card : cards) {
+        string val = card.getVal();
+        if (val != "10") {
+            cout << "|  " << val << "  |  ";
+        } else {
+            cout << "|  " << val << " |  ";
+        }
+        
+    }
+    cout << endl;
+
+    for (Card card : cards) {
+        cout << "|    " << card.getSuit() << "|  ";
+    }
+    cout << endl;
+
+    for (Card card : cards) {
+        cout << "-------  ";    
+    }
+    cout << endl;
 }
 
 int total(Hand hand) {
@@ -91,11 +114,11 @@ int total(Hand hand) {
     int total = 0;
     int cardVal = 0;
     for (Card card : hand.cards) {
-        if ((hand.cards.at(index).getVal() == "Jack") || (hand.cards.at(index).getVal() == "Queen") || (hand.cards.at(index).getVal() == "King")) {
+        if ((hand.cards.at(index).getVal() == "J") || (hand.cards.at(index).getVal() == "Q") || (hand.cards.at(index).getVal() == "K")) {
             cardVal = 10;
             total = total + cardVal;
         }
-        else if (hand.cards.at(index).getVal() == "Ace") {
+        else if (hand.cards.at(index).getVal() == "A") {
             cardVal = 11;
             total = total + cardVal;
             if (total > 21) {
@@ -109,6 +132,22 @@ int total(Hand hand) {
         index++;
     }
     return total;
+}
+
+void dealPlayers(Deck* deck, vector<Hand> &players) {
+    for (int i = 0; i < 2; i++) {
+        for (Hand& player : players) {
+            player.addCard(deck->draw());
+        }
+    }
+}
+
+void removePlayers(vector<Hand> &players) {
+    
+}
+
+void addPlayers(vector<Hand> &players) {
+    
 }
 
 vector<Hand> createPlayers(Deck* deck, int numPlayer) {
@@ -143,9 +182,6 @@ vector<Hand> createPlayers(Deck* deck, int numPlayer) {
         }
 
         playerDecks.at(i).bust = false;
-        playerDecks.at(i).addCard(deck->draw());
-        playerDecks.at(i).addCard(deck->draw());
-
     }
 
     return playerDecks;
@@ -160,6 +196,7 @@ vector<Hand> playPlayers(Deck* deck, vector<Hand> playerDecks, int numPlayer) {
         userCont = ' ';
         t = 0;
         while ((userCont != 's') && (userCont != 'S')) {
+            cout << endl << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
             cout << playerDecks.at(i).getName() << "'s Cards:" << endl;
             playerDecks.at(i).showHand();
             t = total(playerDecks.at(i));
@@ -181,7 +218,6 @@ vector<Hand> playPlayers(Deck* deck, vector<Hand> playerDecks, int numPlayer) {
                     playerDecks.at(i).addCard(deck->draw());
                 }
             }
-
         }
     }
 
@@ -213,7 +249,7 @@ void playDealer(vector<Hand> playerDecks, Deck* deck, int numPlayer) {
                     cout << playerDecks.at(player).getName() << " WINS!!!" << endl;
                 }
                 else {
-                    cout << "TIE" << endl;
+                    cout << "PUSH" << endl;
                 }
             }
             else {
